@@ -3,6 +3,7 @@ package cryptography
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
+import kotlin.experimental.xor
 import kotlin.system.exitProcess
 
 fun main() {
@@ -20,17 +21,20 @@ fun main() {
 fun show() {
     println("Input image file:")
     val inputFileName = readLine()!!
+    println("Password:")
+    val password = readLine()!!
     try {
         val inputFile = File(inputFileName)
         val img = ImageIO.read(inputFile)
-        println("Message: ${decrypt(img)}")
+        println("Message: ${decrypt(img, password)}")
     } catch (e: Exception) {
-        println("exception: ${e.message}")
+        println("exception in show(): ${e.message}")
     }
 }
 
-fun decrypt(image: BufferedImage): String {
+fun decrypt(image: BufferedImage, password: String): String {
     val bytes = mutableListOf<Byte>()
+    val passwordBytes = password.toByteArray()
 
     for (byteNumber in 0 until image.width * image.width) {
         var byte = 0
@@ -48,16 +52,12 @@ fun decrypt(image: BufferedImage): String {
             bytes[bytes.lastIndex - 2] == 0.toByte()) {
             break
         }
-
     }
-    return bytes.subList(0, bytes.size - 3).toByteArray().toString(Charsets.UTF_8)
-//    for (row in 0 until image.height) {
-//        for (col in 0 until image.width) {
-//            var pixel = image.getRGB(col, row)
-//            pixel = pixel.or(0b00000000_00000000_00000000_00000001)
-//            image.setRGB(col, row, pixel)
-//        }
-//    }
+    val result = bytes.subList(0, bytes.size - 3).toByteArray()
+    for (i in 0..result.lastIndex) {
+        result[i] = result[i] xor passwordBytes[i % passwordBytes.size]
+    }
+    return result.toString(Charsets.UTF_8)
 }
 
 fun showError() {
@@ -71,6 +71,8 @@ fun hide() {
     val outputFileName = readLine()!!
     println("Message to hide:")
     val message = readLine()!!
+    println("Password:")
+    val password = readLine()!!
     try {
         val inputFile = File(inputFileName)
         val outputFile = File(outputFileName)
@@ -82,23 +84,25 @@ fun hide() {
             return
         }
 
-        encrypt(img, message)
+        encrypt(img, message, password)
 
         ImageIO.write(img, "png", outputFile)
         println("Message saved in $outputFile image.")
     } catch (e: Exception) {
-        println("exception: ${e.message}")
+        println("exception in hide(): ${e.message}")
     }
 }
 
-fun encrypt(image: BufferedImage, message: String) {
+fun encrypt(image: BufferedImage, message: String, password: String) {
     System.err.println("image (w:h): ${image.width}:${image.height}")
     System.err.println("message length: ${message.length}")
 
     val bytes = message.encodeToByteArray()
+    val passwordBytes = password.encodeToByteArray()
 
     for (i in 0..bytes.lastIndex) {
-        encodeByte(i, image, bytes[i])
+        val byte = bytes[i] xor passwordBytes[i % passwordBytes.size]
+        encodeByte(i, image, byte)
     }
     val ending = byteArrayOf(0, 0, 3)
     for (i in 0..ending.lastIndex) {
