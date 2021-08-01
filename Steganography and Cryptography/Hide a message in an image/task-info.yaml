@@ -230,6 +230,12 @@ files:
   visible: false
   text: iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAACXBIWXMAAC4jAAAuIwF4pT92AAABBUlEQVQYlQXB60rDMBQA4JyT0/Sy1NW2g4GCKAo+w17EF/eXIP4QndvcxbVplqY58ftgtXoJLGa6nl8tqmaZULL7+RhsP9ptmmpCFBIlARcJ83Dwkgi4SElFtTlsKMUAiI1OysQqBQC+Y5fJ0QgO3hARKcKHm3qWeDv6UuvOCPbuzCFJNRnbi6L0ztw/Ldpabfe4/T1+7fxwsSKOpLJqChNRNEM8n11/gb3Je65cMFEoattHRbhoyn0nJaIEfr5Tb98lqeZ4WlMu4bZOXz/jci4iCEIYLqAzkICFvKaMpvddIIkxwKaPOhW9i72NueSJI61PLkpZ5eJvEIND4Ni56KbQWQbmf89/i6y31LGHAAAAAElFTkSuQmCC
   learner_created: false
+- name: test/out.png
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/160/stages/832/implement#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Sun, 01 Aug 2021 04:41:08 UTC
 record: -1
